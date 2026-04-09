@@ -1,54 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Student List | Dev Mode</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 40px; }
-        .card { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background: #3b82f6; color: white; padding: 12px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #334155; }
-        .highlight { color: #38bdf8; font-weight: bold; }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #0f172a;
+        color: white;
+        padding: 40px;
+      }
+      .card {
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #334155;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th {
+        background: #3b82f6;
+        color: white;
+        padding: 12px;
+        text-align: left;
+      }
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #334155;
+      }
+      .highlight {
+        color: #38bdf8;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
-
-<div class="card">
-    <h2><span style="color:#38bdf8">></span> Danh sách sinh viên</h2>
-    <table>
+  </head>
+  <body>
+    <div class="card">
+      <h2><span style="color: #38bdf8">></span> Danh sách sinh viên</h2>
+      <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên sinh viên</th>
-                <th>Chuyên ngành</th>
-                <th>GPA</th>
-            </tr>
+          <tr>
+            <th>ID</th>
+            <th>Tên sinh viên</th>
+            <th>Chuyên ngành</th>
+            <th>GPA</th>
+          </tr>
         </thead>
-        <tbody id="student-table">
-            </tbody>
-    </table>
-</div>
+        <tbody id="student-table"></tbody>
+      </table>
+    </div>
 
-<script>
-    async function fetchData() {
+    <script>
+      async function fetchData() {
         try {
-            // --- CẤU HÌNH ĐƯỜNG DẪN (TOGGLE TẠI ĐÂY) ---
-            
-            // Cách 1: Test trực tiếp (Dùng khi mở file index.html bằng trình duyệt)
-            const apiUrl = 'http://127.0.0.1:8000/student'; 
+          // --- CẤU HÌNH ĐƯỜNG DẪN (TOGGLE TẠI ĐÂY) ---
 
-            // Cách 2: Dùng qua Nginx (Dùng khi đã setup Nginx Gateway)
-            // const apiUrl = '/api/student'; 
+          const apiUrl = "/api/student";
 
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            
-            const tbody = document.getElementById('student-table');
-            tbody.innerHTML = '';
 
-            data.forEach(s => {
-                tbody.innerHTML += `
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+
+          const tbody = document.getElementById("student-table");
+          tbody.innerHTML = "";
+
+          data.forEach((s) => {
+            tbody.innerHTML += `
                     <tr>
                         <td>${s.id}</td>
                         <td>${s.name}</td>
@@ -56,15 +76,15 @@
                         <td class="highlight">${s.gpa}</td>
                     </tr>
                 `;
-            });
+          });
         } catch (err) {
-            console.error("Lỗi kết nối Backend:", err);
-            document.getElementById('student-table').innerHTML = 
-                '<tr><td colspan="4" style="color:red; text-align:center;">Không thể kết nối Backend (Port 8000)</td></tr>';
+          console.error("Lỗi kết nối Backend:", err);
+          document.getElementById("student-table").innerHTML =
+            '<tr><td colspan="4" style="color:red; text-align:center;">Không thể kết nối Backend (Port 8000)</td></tr>';
         }
-    }
+      }
 
-    window.onload = fetchData;
-</script>
-</body>
+      window.onload = fetchData;
+    </script>
+  </body>
 </html>

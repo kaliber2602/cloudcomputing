@@ -1,0 +1,117 @@
+networks:
+  cloud-net:
+
+services:
+  web-frontend-server:
+    build: ./web-frontend-server
+    container_name: web-frontend-server
+    ports:
+      - "8080:80"
+    networks:
+      - cloud-net
+
+  application-backend-server:
+    build: ./application-backend-server
+    container_name: application-backend-server
+    ports:
+      - "8085:8081"
+    networks:
+      - cloud-net
+
+  relational-database-server:
+    image: mariadb
+    container_name: relational-database-server
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./relational-database-server/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - cloud-net
+
+  relational-database-dashboard-server:
+    build: ./relational-database-server
+    container_name: relational-database-dashboard-server
+    depends_on:
+      - relational-database-server
+    ports:
+      - "8082:8000"
+    networks:
+      - cloud-net
+
+  authentication-identity-server:
+    image: quay.io/keycloak/keycloak
+    container_name: authentication-identity-server
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+    networks:
+      - cloud-net
+
+  object-storage-server:
+    image: minio/minio
+    container_name: object-storage-server
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - ./object-storage-server/data:/data
+    ports:
+      - "9001:9001"
+    networks:
+      - cloud-net
+
+  internal-dns-server:
+    image: internetsystemsconsortium/bind9:9.18
+    container_name: internal-dns-server
+    volumes:
+      - ./internal-dns-server/named.conf.local:/etc/bind/named.conf.local:ro
+      - ./internal-dns-server/db.cloud.local:/etc/bind/db.cloud.local:ro
+    ports:
+      - "1053:53/udp"
+    networks:
+      - cloud-net
+
+  monitoring-node-exporter-server:
+    image: prom/node-exporter
+    container_name: monitoring-node-exporter-server
+    ports:
+      - "9100:9100"
+    networks:
+      - cloud-net
+
+  monitoring-prometheus-server:
+    image: prom/prometheus
+    container_name: monitoring-prometheus-server
+    volumes:
+      - ./monitoring-prometheus-server/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - cloud-net
+
+  monitoring-grafana-dashboard-server:
+    image: grafana/grafana
+    container_name: monitoring-grafana-dashboard-server
+    ports:
+      - "3000:3000"
+    networks:
+      - cloud-net
+
+  api-gateway-proxy-server:
+    build: ./api-gateway-proxy-server
+    container_name: api-gateway-proxy-server
+    depends_on:
+      - web-frontend-server
+      - application-backend-server
+      - authentication-identity-server
+    ports:
+      - "80:80"
+    networks:
+      - cloud-net
