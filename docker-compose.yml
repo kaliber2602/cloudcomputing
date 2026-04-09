@@ -53,6 +53,16 @@ services:
     networks:
       - cloud-net
 
+  flask-secure-app:
+    build: ./authentication-identity-server
+    container_name: flask-secure-app
+    ports:
+      - "8086:5000"
+    depends_on:
+      - authentication-identity-server
+    networks:
+      - cloud-net
+
   object-storage-server:
     image: minio/minio
     container_name: object-storage-server

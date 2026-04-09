@@ -24,9 +24,17 @@ CloudComputing MiniCloud Setup
        API JSON via proxy: http://localhost/api/students-db
 
    - Keycloak Auth Server:
-       http://localhost:8081
+       Server URL: http://localhost:8081
+       Admin console: http://localhost:8081/admin/master/console/
        + Username: admin
        + Password: admin
+       (Lưu ý: với Keycloak này, `http://localhost:8081/auth/` không phải trang login chung và có thể trả 404.)
+       Login/auth request thường là:
+       http://localhost:8081/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=...
+
+   - Flask Secure App (Demo /secure endpoint):
+       URL: http://localhost:8086/secure
+       (Cần Authorization: Bearer <token> từ Keycloak)
 
    - MinIO Object Storage Console:
        http://localhost:9001
@@ -64,4 +72,11 @@ CloudComputing MiniCloud Setup
    - Database API:
        http://localhost:8082/api/students-db
 
+4. Hướng dẫn Assignment & Bài Tập Lab
+   - Keycloak Identity Provider & SSO:
+       Xem file: keycloak-assignment.md
+       (Yêu cầu: tạo realm, user, client, lấy token endpoint, truy cập /secure)
+   - Flask Secure App Demo:
+       URL: http://localhost:8086/secure
+       Test với: curl -H "Authorization: Bearer <token>" http://localhost:8086/secure
 
