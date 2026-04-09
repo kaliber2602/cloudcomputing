@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me | MyMiniCloud</title>
+    <style>
+        :root {
+            --bg-color: #0f172a; /* Màu xanh đen cực sâu */
+            --accent: #38bdf8; /* Xanh cyan sáng */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --card-bg: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            padding: 5px;
+            object-fit: cover;
+        }
+
+        h1 { margin: 0; color: var(--accent); font-size: 2.2rem; }
+        .subtitle { color: var(--text-secondary); font-family: monospace; }
+
+        .bio { margin-bottom: 30px; font-size: 1.1rem; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #475569;
+        }
+
+        .stat-item strong { color: var(--accent); display: block; }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tech-tag {
+            background: #0ea5e9;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-home:hover { color: var(--accent); transform: translateX(-5px); }
+
+        @media (max-width: 600px) {
+            .profile-header { flex-direction: column; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-header">
+        <img src="/images/avatar.jpg" alt="Admin Avatar" class="avatar">
+        <div>
+            <h1>Admin @ MyMiniCloud</h1>
+            <div class="subtitle">System Architect | Keyboard Enthusiast</div>
+        </div>
+    </div>
+
+    <div class="bio">
+        Chào bạn! Mình là một người yêu thích việc tối ưu hóa hệ thống và xây dựng không gian làm việc tối giản. 
+        Blog này là nơi mình ghi lại hành trình chinh phục <strong>Nginx</strong>, <strong>Linux</strong> 
+        và những trải nghiệm thực tế khi build "góc nhỏ" công nghệ của riêng mình.
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-item">
+            <strong>Current Project:</strong>
+            SaaS Task Management & Home Server Lab
+        </div>
+        <div class="stat-item">
+            <strong>Interests:</strong>
+            SVD, Machine Learning & Clean Code
+        </div>
+    </div>
+
+    <h3>My Tech Stack</h3>
+    <div class="tech-tags">
+        <span class="tech-tag">Linux (Ubuntu/Debian)</span>
+        <span class="tech-tag">Nginx</span>
+        <span class="tech-tag">MERN Stack</span>
+        <span class="tech-tag">Python (ML)</span>
+        <span class="tech-tag">Docker</span>
+        <span class="tech-tag">Firebase</span>
+    </div>
+
+    <a href="/" class="back-home">← Trở lại trang chủ</a>
+</div>
+
+</body>
+</html>
