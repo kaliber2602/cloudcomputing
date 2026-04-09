@@ -1,7 +1,7 @@
 CloudComputing MiniCloud Setup
 
 1. Chạy Docker Compose
-   - Mở PowerShell hoặc CMD tại thư mục `c:\Users\LG\Downloads\CloudComputing`
+   - Mở PowerShell hoặc CMD tại thư mục
    - Chạy:
        docker compose up -d --build
 
