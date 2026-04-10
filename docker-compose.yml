@@ -9,6 +9,7 @@ services:
       - "8080:80"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   application-backend-server:
     build: ./application-backend-server
@@ -17,28 +18,20 @@ services:
       - "8085:8081"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   relational-database-server:
     image: mariadb
     container_name: relational-database-server
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MARIADB_ROOT_PASSWORD: root
     volumes:
       - ./relational-database-server/init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     networks:
       - cloud-net
-
-  relational-database-dashboard-server:
-    build: ./relational-database-server
-    container_name: relational-database-dashboard-server
-    depends_on:
-      - relational-database-server
-    ports:
-      - "8082:8000"
-    networks:
-      - cloud-net
+    restart: unless-stopped
 
   authentication-identity-server:
     image: quay.io/keycloak/keycloak
@@ -50,16 +43,6 @@ services:
     ports:
       - "8081:8080"
     restart: unless-stopped
-    networks:
-      - cloud-net
-
-  flask-secure-app:
-    build: ./authentication-identity-server
-    container_name: flask-secure-app
-    ports:
-      - "8086:5000"
-    depends_on:
-      - authentication-identity-server
     networks:
       - cloud-net
 
@@ -76,6 +59,7 @@ services:
       - "9001:9001"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   internal-dns-server:
     image: internetsystemsconsortium/bind9:9.18
@@ -87,6 +71,7 @@ services:
       - "1053:53/udp"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   monitoring-node-exporter-server:
     image: prom/node-exporter
@@ -95,6 +80,7 @@ services:
       - "9100:9100"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   monitoring-prometheus-server:
     image: prom/prometheus
@@ -105,6 +91,7 @@ services:
       - "9090:9090"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   monitoring-grafana-dashboard-server:
     image: grafana/grafana
@@ -113,6 +100,7 @@ services:
       - "3000:3000"
     networks:
       - cloud-net
+    restart: unless-stopped
 
   api-gateway-proxy-server:
     build: ./api-gateway-proxy-server
@@ -125,3 +113,4 @@ services:
       - "80:80"
     networks:
       - cloud-net
+    restart: unless-stopped
