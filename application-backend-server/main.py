@@ -6,6 +6,7 @@ import mysql.connector
 from typing import Optional
 import jwt
 import requests
+from pydantic import BaseModel, constr
 from jwt import algorithms
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +19,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- Pydantic Models for DB Operations ---
+class Student(BaseModel):
+    student_id: constr(strip_whitespace=True, min_length=1, max_length=10)
+    fullname: constr(strip_whitespace=True, min_length=1, max_length=100)
+    dob: constr(strip_whitespace=True, min_length=10, max_length=10)
+    major: constr(strip_whitespace=True, min_length=1, max_length=50)
+
+class StudentUpdate(BaseModel):
+    student_id: Optional[constr(strip_whitespace=True, min_length=1, max_length=10)] = None
+    fullname: Optional[constr(strip_whitespace=True, min_length=1, max_length=100)] = None
+    dob: Optional[constr(strip_whitespace=True, min_length=10, max_length=10)] = None
+    major: Optional[constr(strip_whitespace=True, min_length=1, max_length=50)] = None
 
 # --- Keycloak/OIDC Configuration ---
 # NOTE: URL này sử dụng tên container và cổng nội bộ.
@@ -130,3 +144,73 @@ def get_students_from_db():
 def secure_endpoint(token_payload: dict = Depends(get_token_verifier)):
     """Endpoint bảo mật yêu cầu access token hợp lệ từ Keycloak."""
     return {"message": f"Access granted to secure endpoint for user: {token_payload.get('preferred_username')}"}
+
+# --- CRUD Endpoints for MariaDB ---
+
+@app.post("/students-db", status_code=201)
+def create_student(student: Student):
+    """Tạo một sinh viên mới trong database."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO students (student_id, fullname, dob, major) VALUES (%s, %s, %s, %s)",
+                (student.student_id, student.fullname, student.dob, student.major),
+            )
+            conn.commit()
+            inserted_id = cursor.lastrowid
+            return {"id": inserted_id, **student.dict()}
+    except mysql.connector.Error as exc:
+        raise HTTPException(status_code=500, detail=f"Lỗi khi tạo sinh viên: {exc}")
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+@app.put("/students-db/{student_id}")
+def update_student(student_id: int, student: StudentUpdate):
+    """Cập nhật thông tin sinh viên dựa trên ID."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            # Kiểm tra xem sinh viên có tồn tại không
+            cursor.execute("SELECT id FROM students WHERE id = %s", (student_id,))
+            if cursor.fetchone() is None:
+                raise HTTPException(status_code=404, detail="Không tìm thấy sinh viên")
+
+            updates = []
+            values = []
+            student_data = student.dict(exclude_unset=True)
+            if not student_data:
+                raise HTTPException(status_code=400, detail="Không có trường nào để cập nhật")
+
+            for key, value in student_data.items():
+                updates.append(f"{key} = %s")
+                values.append(value)
+
+            values.append(student_id)
+            query = f"UPDATE students SET {', '.join(updates)} WHERE id = %s"
+            cursor.execute(query, tuple(values))
+            conn.commit()
+            return {"message": f"Đã cập nhật sinh viên có ID {student_id}"}
+    except mysql.connector.Error as exc:
+        raise HTTPException(status_code=500, detail=f"Lỗi khi cập nhật: {exc}")
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+@app.delete("/students-db/{student_id}")
+def delete_student(student_id: int):
+    """Xóa một sinh viên khỏi database dựa trên ID."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("DELETE FROM students WHERE id = %s", (student_id,))
+            conn.commit()
+            if cursor.rowcount == 0:
+                raise HTTPException(status_code=404, detail="Không tìm thấy sinh viên để xóa")
+            return {"message": f"Đã xóa sinh viên có ID {student_id}"}
+    except mysql.connector.Error as exc:
+        raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {exc}")
+    finally:
+        if conn.is_connected():
+            conn.close()
