@@ -1,0 +1,6 @@
+# Prometheus Mock Metrics
+nginx_http_requests_total 100
+nginx_connections_active 5
+nginx_connections_reading 0
+nginx_connections_writing 1
+nginx_connections_waiting 4

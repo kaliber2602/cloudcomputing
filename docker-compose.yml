@@ -65,7 +65,7 @@ services:
     image: internetsystemsconsortium/bind9:9.18
     container_name: internal-dns-server
     volumes:
-      - ./internal-dns-server/named.conf.local:/etc/bind/named.conf.local:ro
+      - ./internal-dns-server/named.conf.local:/etc/bind/named.conf:ro
       - ./internal-dns-server/db.cloud.local:/etc/bind/db.cloud.local:ro
     ports:
       - "1053:53/udp"

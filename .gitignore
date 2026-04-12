@@ -1,0 +1,38 @@
+# OS related files
+.DS_Store
+Thumbs.db
+
+# Docker specific
+# Tránh commit dữ liệu của database ra ngoài
+/relational-database-server/init/data/
+/relational-database-server/data/
+
+# Tránh commit dữ liệu của MinIO
+/object-storage-server/data/*
+!/object-storage-server/data/test1/
+# Loại bỏ các file metadata của MinIO nếu có lọt ra ngoài
+xl.meta
+xl.json
+.minio.sys/
+
+# Prometheus & monitoring data
+/monitoring-prometheus-server/data/
+/monitoring-grafana-dashboard-server/data/
+
+# Python specific (cho backend và log)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

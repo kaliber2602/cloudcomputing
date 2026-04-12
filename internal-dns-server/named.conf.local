@@ -1,4 +1,10 @@
+options {
+    directory "/var/cache/bind";
+    listen-on { any; };
+    allow-query { any; };
+};
+
 zone "cloud.local" {
- type master;
- file "/etc/bind/db.cloud.local";
+    type master;
+    file "/etc/bind/db.cloud.local";
 };
