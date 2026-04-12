@@ -7,14 +7,6 @@ Thumbs.db
 /relational-database-server/init/data/
 /relational-database-server/data/
 
-# Object Storage Data (giữ lại để nộp bài)
-# /object-storage-server/data/*  <-- Bỏ comment dòng này nếu muốn ignore dữ liệu
-
-# Metadata nội bộ của MinIO (có thể bỏ qua nếu muốn Git sạch hơn)
-# xl.meta
-# xl.json
-# .minio.sys/
-
 # Prometheus & monitoring data
 /monitoring-prometheus-server/data/
 /monitoring-grafana-dashboard-server/data/
