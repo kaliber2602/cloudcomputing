@@ -11,6 +11,20 @@ services:
       - cloud-net
     restart: unless-stopped
 
+  web-frontend-server1:
+    build: ./web-frontend-server1
+    container_name: web-frontend-server1
+    networks:
+      - cloud-net
+    restart: unless-stopped
+
+  web-frontend-server2:
+    build: ./web-frontend-server2
+    container_name: web-frontend-server2
+    networks:
+      - cloud-net
+    restart: unless-stopped
+
   application-backend-server:
     build: ./application-backend-server
     container_name: application-backend-server
@@ -36,10 +50,13 @@ services:
   authentication-identity-server:
     image: quay.io/keycloak/keycloak
     container_name: authentication-identity-server
-    command: start-dev
+    command: start-dev --import-realm
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HOSTNAME_STRICT: "false"
+      KC_PROXY: edge
     ports:
       - "8081:8080"
     restart: unless-stopped
@@ -98,6 +115,8 @@ services:
     container_name: monitoring-grafana-dashboard-server
     ports:
       - "3000:3000"
+    volumes:
+      - ./monitoring-grafana-dashboard-server/data:/var/lib/grafana
     networks:
       - cloud-net
     restart: unless-stopped
@@ -107,6 +126,8 @@ services:
     container_name: api-gateway-proxy-server
     depends_on:
       - web-frontend-server
+      - web-frontend-server1
+      - web-frontend-server2
       - application-backend-server
       - authentication-identity-server
     ports:

@@ -7,10 +7,6 @@ Thumbs.db
 /relational-database-server/init/data/
 /relational-database-server/data/
 
-# Prometheus & monitoring data
-/monitoring-prometheus-server/data/
-/monitoring-grafana-dashboard-server/data/
-
 # Python specific (cho backend và log)
 __pycache__/
 *.py[cod]

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyMiniCloud | Tech Setup Blog</title>
+    <style>
+      :root {
+        --bg-color: #121212; /* Màu nền tối tối sâu */
+        --card-bg: #1e1e1e; /* Màu nền card hơi xám */
+        --text-primary: #e0e0e0;
+        --text-secondary: #aaaaaa;
+        --accent: #00bcd4; /* Màu xanh neon làm điểm nhấn */
+        --tag-bg: #2d2d2d;
+        --font-main: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        --font-mono: "Courier New", Courier, monospace;
+      }
+
+      body {
+        font-family: var(--font-main);
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* --- Header --- */
+      header {
+        width: 100%;
+        max-width: 1200px;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #333;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--accent);
+        text-decoration: none;
+        font-family: var(--font-mono);
+      }
+
+      .logo::before {
+        content: "> ";
+      }
+
+      nav a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-left: 20px;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: var(--text-primary);
+      }
+
+      /* --- Main Content --- */
+      main {
+        width: 100%;
+        max-width: 1200px;
+        padding: 40px 20px;
+      }
+
+      /* --- Hero Section --- */
+      .hero {
+        background-color: var(--card-bg);
+        padding: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+        border: 1px solid #333;
+      }
+
+      .hero-text {
+        flex: 2;
+        padding-right: 30px;
+      }
+      .hero-img {
+        flex: 1;
+        text-align: right;
+      }
+      .hero-img img {
+        max-width: 100%;
+        border-radius: 8px;
+        filter: grayscale(50%);
+      }
+
+      .hero-welcome {
+        font-family: var(--font-mono);
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+        margin: 0 0 15px 0;
+        line-height: 1.2;
+      }
+      .hero p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+      }
+
+      .btn-cta {
+        background-color: var(--accent);
+        color: #000;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        display: inline-block;
+      }
+      .btn-cta:hover {
+        background-color: #00e5ff;
+      }
+
+      /* --- Grid & Cards --- */
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+      }
+
+      .card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #333;
+        transition:
+          transform 0.3s,
+          border-color 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent);
+      }
+
+      .card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        filter: grayscale(80%);
+        transition: filter 0.3s;
+      }
+      .card:hover .card-img {
+        filter: grayscale(0%);
+      }
+
+      .card-content {
+        padding: 20px;
+      }
+
+      .card-category {
+        font-family: var(--font-mono);
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      .card h2 {
+        font-size: 1.4rem;
+        margin: 0 0 10px 0;
+        line-height: 1.3;
+      }
+      .card h2 a {
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .card h2 a:hover {
+        color: var(--accent);
+      }
+
+      .card-excerpt {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tag {
+        background-color: var(--tag-bg);
+        color: var(--text-secondary);
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-family: var(--font-mono);
+      }
+
+      /* --- Footer --- */
+      footer {
+        width: 100%;
+        max-width: 1200px;
+        padding: 30px 20px;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        border-top: 1px solid #333;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="logo">MyMiniCloud</a>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/blogs/about.html">Về tôi</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-text">
+          <div class="hero-welcome">WELCOME_TO_MY_CORE</div>
+          <h1>Bàn phím cơ & Lộ trình Coding: Góc setup của tôi</h1>
+          <p>
+            Hệ sinh thái kiến thức về Nginx, Docker, Frontend, Backend và những
+            món đồ chơi tech không thể thiếu.
+          </p>
+          <a href="/blogs/blog1.html" class="btn-cta">Khám phá ngay</a>
+        </div>
+        <div class="hero-img">
+          <img src="/images/coding-setup.jpg" alt="Setup Coding" />
+        </div>
+      </section>
+
+      <div class="grid-container">
+        <article class="card">
+          <img
+            src="/images/post1.jpg"
+            alt="Review bàn phím cơ"
+            class="card-img"
+          />
+          <div class="card-content">
+            <div class="card-category">SETUP // BÀN PHÍM</div>
+            <h2>
+              <a href="/blogs/blog1.html"
+                >Review bàn phím cơ GMMK Pro cho coder</a
+              >
+            </h2>
+            <p class="card-excerpt">
+              Đánh giá chi tiết về build quality, trải nghiệm gõ và khả năng
+              custom.
+            </p>
+            <div class="tag-container">
+              <span class="tag">GMMK Pro</span>
+              <span class="tag">Mechanical Keyboards</span>
+              <span class="tag">Coding Tools</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img
+            src="/images/post2.jpg"
+            alt="Tối ưu không gian"
+            class="card-img"
+          />
+          <div class="card-content">
+            <div class="card-category">SETUP // WORKSPACE</div>
+            <h2>
+              <a href="/blogs/blog2.html">Tối ưu không gian làm việc nhỏ hẹp</a>
+            </h2>
+            <p class="card-excerpt">
+              Mẹo sắp xếp, quản lý dây cáp và tận dụng ánh sáng cho góc setup
+              2m².
+            </p>
+            <div class="tag-container">
+              <span class="tag">Minimalism</span>
+              <span class="tag">Desk Setup</span>
+              <span class="tag">IKEA</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img
+            src="/images/post3.png"
+            alt="Lộ trình Web Server"
+            class="card-img"
+          />
+          <div class="card-content">
+            <div class="card-category">CODING // DEVOPS</div>
+            <h2>
+              <a href="/blogs/blog3.html"
+                >Lộ trình học Web Server Nginx từ 0 đến 1</a
+              >
+            </h2>
+            <p class="card-excerpt">
+              Bắt đầu với static content đến load balancing. Hiểu kiến trúc và
+              cấu hình cơ bản.
+            </p>
+            <div class="tag-container">
+              <span class="tag">Nginx</span>
+              <span class="tag">Web Hosting</span>
+              <span class="tag">Linux</span>
+              <span class="tag">Static Content</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+    <h2>Data Services</h2>
+    <ul>
+      <li><a href="/student-json">View Student JSON Data</a></li>
+      <li><a href="/database">View Student Database</a></li>
+    </ul>
+
+    <footer>
+      &copy; 2024 MyMiniCloud.
+      <code style="color: var(--accent)">status: online;</code>
+    </footer>
+  </body>
+</html>

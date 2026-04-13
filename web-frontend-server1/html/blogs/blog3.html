@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Nginx Roadmap | MyMiniCloud</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: 'Courier New', monospace; line-height: 1.6; padding: 5%; }
+        pre { background: #000; padding: 15px; border-radius: 5px; color: #50fa7b; overflow-x: auto; }
+        .back-link { color: #00bcd4; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← Quay lại trang chủ</a>
+    <h1>Lộ trình học Web Server Nginx từ 0 đến 1</h1>
+    <img src="/images/post3.png" alt="Nginx Configuration">
+
+    <p>Nginx không chỉ là một web server, nó là một Reverse Proxy mạnh mẽ mà mọi Dev/DevOps cần phải biết.</p>
+
+    <h3>Giai đoạn 1: Static Hosting</h3>
+    <p>Bắt đầu bằng việc phục vụ các file HTML/CSS đơn giản như blog này. Hiểu về <code>root</code> và <code>alias</code>.</p>
+    
+    <pre>
+location /media/ {
+    alias /var/www/images/;
+}</pre>
+
+    <h3>Giai đoạn 2: Reverse Proxy</h3>
+    <p>Học cách trỏ Nginx về một ứng dụng chạy Node.js hoặc Python đang listen ở port 3000 hoặc 8000.</p>
+
+    <h3>Giai đoạn 3: Bảo mật & Tối ưu</h3>
+    <p>Cấu hình SSL (HTTPS) với Let's Encrypt và bật Gzip compression để tăng tốc độ tải trang.</p>
+    
+    <p>Hãy bắt đầu ngay từ hôm nay bằng việc tự build cho mình một chiếc Server nhỏ nhé!</p>
+</body>
+</html>

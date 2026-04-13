@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>MariaDB Dashboard | MyMiniCloud</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f7f6; }
+        h2 { color: #2e7d32; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #2e7d32; color: white; padding: 15px; text-align: left; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        tr:nth-child(even) { background: #fafafa; }
+        button { background: #2e7d32; color: white; border: none; padding: 8px 10px; margin-right: 5px; border-radius: 8px; cursor: pointer; }
+        button.delete { background: #c62828; }
+        form { display: grid; gap: 12px; margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .actions { display: flex; gap: 10px; }
+        .actions button { min-width: 120px; }
+    </style>
+</head>
+<body>
+
+    <h2>Dashboard Sinh viên (MariaDB)</h2>
+    <div class="card" style="padding: 20px;">
+        <form id="student-form">
+            <div class="form-grid">
+                <div>
+                    <label for="student-id">Student ID</label>
+                    <input id="student-id" required placeholder="SV01" />
+                </div>
+                <div>
+                    <label for="fullname">Fullname</label>
+                    <input id="fullname" required placeholder="Nguyen Van A" />
+                </div>
+                <div>
+                    <label for="dob">DOB</label>
+                    <input id="dob" type="date" required />
+                </div>
+                <div>
+                    <label for="major">Major</label>
+                    <input id="major" required placeholder="IT" />
+                </div>
+            </div>
+            <input type="hidden" id="record-id" />
+            <div class="actions">
+                <button id="submit-button" type="submit">Thêm mới</button>
+                <button type="button" onclick="resetForm()">Đặt lại</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student ID</th>
+                    <th>Fullname</th>
+                    <th>DOB</th>
+                    <th>Major</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="db-table"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const apiBase = '/api/students-db';
+
+        async function loadDBData() {
+            const response = await fetch(apiBase);
+            const data = await response.json();
+            const tbody = document.getElementById('db-table');
+            tbody.innerHTML = '';
+
+            data.forEach((s, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${s.student_id}</strong></td>
+                        <td>${s.fullname}</td>
+                        <td>${s.dob}</td>
+                        <td>${s.major}</td>
+                        <td>
+                            <button type="button" onclick="fillForm(${s.id}, '${s.student_id}', '${s.fullname}', '${s.dob}', '${s.major}')">Sửa</button>
+                            <button type="button" class="delete" onclick="deleteStudent(${s.id})">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function fillForm(id, studentId, fullname, dob, major) {
+            document.getElementById('student-id').value = studentId;
+            document.getElementById('fullname').value = fullname;
+            document.getElementById('dob').value = dob;
+            document.getElementById('major').value = major;
+            document.getElementById('record-id').value = id;
+            document.getElementById('submit-button').textContent = 'Cập nhật';
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+            const studentId = document.getElementById('student-id').value.trim();
+            const fullname = document.getElementById('fullname').value.trim();
+            const dob = document.getElementById('dob').value;
+            const major = document.getElementById('major').value.trim();
+            const recordId = document.getElementById('record-id').value;
+            const payload = { student_id: studentId, fullname, dob, major };
+
+            const method = recordId ? 'PUT' : 'POST';
+            const url = recordId ? `${apiBase}/${recordId}` : apiBase;
+
+            await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            resetForm();
+            loadDBData();
+        }
+
+        async function deleteStudent(id) {
+            if (!confirm('Xóa sinh viên này?')) return;
+            await fetch(`${apiBase}/${id}`, { method: 'DELETE' });
+            loadDBData();
+        }
+
+        function resetForm() {
+            document.getElementById('record-id').value = '';
+            document.getElementById('student-id').value = '';
+            document.getElementById('fullname').value = '';
+            document.getElementById('dob').value = '';
+            document.getElementById('major').value = '';
+            document.getElementById('submit-button').textContent = 'Thêm mới';
+        }
+
+        window.onload = () => {
+            document.getElementById('student-form').onsubmit = submitForm;
+            loadDBData();
+        };
+    </script>
+</body>
+</html>
