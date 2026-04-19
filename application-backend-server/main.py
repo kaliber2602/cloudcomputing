@@ -37,11 +37,11 @@ class StudentUpdate(BaseModel):
 # NOTE: URL này sử dụng tên container và cổng nội bộ.
 # Realm 'realm_sv001' dựa trên 'keycloak-assignment.md'.
 # Vui lòng cập nhật 'realm_sv001' nếu bạn dùng tên realm khác.
-KEYCLOAK_URL = "http://authentication-identity-server:8080"
+KEYCLOAK_URL = "http://authentication-identity-server:8080/auth"
 REALM_NAME = "realm_sv001" 
 KEYCLOAK_CERTS_URL = f"{KEYCLOAK_URL}/realms/{REALM_NAME}/protocol/openid-connect/certs"
 # Audience nên khớp với 'Client ID' trong Keycloak.
-AUDIENCE = "flask-app" 
+AUDIENCE = "account" 
 
 # --- Database Configuration ---
 DB_CONFIG = {

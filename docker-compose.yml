@@ -74,6 +74,7 @@ services:
       - ./object-storage-server/data:/data
     ports:
       - "9001:9001"
+      - "9000:9000"
     networks:
       - cloud-net
     restart: unless-stopped
